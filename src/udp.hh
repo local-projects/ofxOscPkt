@@ -338,7 +338,11 @@ private:
     
     err = getaddrinfo(binding ? 0 : hostname.c_str(), port.empty() ? 0 : port.c_str(), &hints, &result);
     if (err != 0) {
-      setErr(gai_strerrorA(err));
+        #ifdef WIN32
+        setErr(gai_strerrorA(err));
+        #else
+        setErr(gai_strerror(err));
+        #endif
       return false;
     }
 
